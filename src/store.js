@@ -14,8 +14,6 @@ export const PHOTO_POSES = {
   Chill: "Chill",
   Cool: "Cool",
   Punch: "Punch",
-  Ninja: "Ninja",
-  King: "King",
   Busy: "Busy",
 };
 
