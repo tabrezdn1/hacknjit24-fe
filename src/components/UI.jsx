@@ -4,20 +4,67 @@ const PosesBox = () => {
   const curPose = useConfiguratorStore((state) => state.pose);
   const setPose = useConfiguratorStore((state) => state.setPose);
   return (
-    <div className="pointer-events-auto md:rounded-t-lg bg-gradient-to-br from-black/30 to-indigo-900/20  backdrop-blur-sm drop-shadow-md flex p-6 gap-3 overflow-x-auto noscrollbar">
-      {Object.keys(PHOTO_POSES).map((pose) => (
-        <button
-          className={`transition-colors duration-200 font-medium flex-shrink-0 border-b ${
-            curPose === PHOTO_POSES[pose]
-              ? "text-white shadow-purple-100 border-b-white"
-              : "text-gray-200 hover:text-gray-100 border-b-transparent"
-          }
-       `}
-          onClick={() => setPose(PHOTO_POSES[pose])}
-        >
-          {pose}
-        </button>
-      ))}
+    <div className="pointer-events-auto md:rounded-t-lg bg-gradient-to-br from-black/30 to-indigo-900/20 backdrop-blur-sm drop-shadow-md flex flex-col p-6 gap-4">
+      <div className="flex flex-col gap-4">
+        <div className="text-white">Hi how are you today?</div>
+        <div className="flex gap-2">
+          <input 
+            type="text"
+            placeholder="Type your message..."
+            className="flex-1 bg-black/20 text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-indigo-500"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                const poses = Object.values(PHOTO_POSES);
+                let firstPose = poses[Math.floor(Math.random() * poses.length)];
+                let thirdPose;
+                // Make sure third pose is different from first
+                do {
+                  thirdPose = poses[Math.floor(Math.random() * poses.length)];
+                } while (thirdPose === firstPose);
+
+                setTimeout(() => {
+                  setPose(firstPose);
+                }, Math.random() * 500);
+                
+                setTimeout(() => {
+                  setPose(PHOTO_POSES.Idle);
+                }, Math.random() * 500 + 500);
+                
+                setTimeout(() => {
+                  setPose(thirdPose);
+                }, Math.random() * 500 + 1000);
+              }
+            }}
+          />
+          <button 
+            className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition-colors"
+            onClick={() => {
+              const poses = Object.values(PHOTO_POSES);
+              let firstPose = poses[Math.floor(Math.random() * poses.length)];
+              let thirdPose;
+              // Make sure third pose is different from first
+              do {
+                thirdPose = poses[Math.floor(Math.random() * poses.length)];
+              } while (thirdPose === firstPose);
+
+              setTimeout(() => {
+                setPose(firstPose);
+              }, Math.random() * 500);
+              
+              setTimeout(() => {
+                setPose(PHOTO_POSES.Idle);
+              }, Math.random() * 500 + 500);
+              
+              setTimeout(() => {
+                setPose(thirdPose);
+              }, Math.random() * 500 + 1000);
+            }}
+          >
+            Send
+          </button>
+        </div>
+        <div className="text-white">Put the response here and render it conditionally</div>
+      </div>
     </div>
   );
 };
@@ -176,6 +223,104 @@ const DownloadButton = () => {
     </button>
   );
 };
+const MeetTheTeamButton = () => {
+  return (
+    <button
+      className="rounded-lg bg-indigo-500 hover:bg-indigo-600 transition-colors duration-300 text-white font-medium px-4 py-3 pointer-events-auto drop-shadow-md"
+      onClick={() => {
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        modal.innerHTML = `
+          <div class="bg-white p-8 rounded-lg max-w-2xl w-full mx-4">
+            <h2 class="text-2xl font-bold mb-6">Meet Our Team</h2>
+            <div class="grid gap-6 md:grid-cols-3">
+              <div class="text-center">
+                <h3 class="font-semibold mb-2">Team Member 1</h3>
+                <a href="https://linkedin.com/in/member1" target="_blank" class="text-indigo-600 hover:text-indigo-800">LinkedIn Profile</a>
+              </div>
+              <div class="text-center">
+                <h3 class="font-semibold mb-2">Team Member 2</h3>
+                <a href="https://linkedin.com/in/member2" target="_blank" class="text-indigo-600 hover:text-indigo-800">LinkedIn Profile</a>
+              </div>
+              <div class="text-center">
+                <h3 class="font-semibold mb-2">Team Member 3</h3>
+                <a href="https://linkedin.com/in/member3" target="_blank" class="text-indigo-600 hover:text-indigo-800">LinkedIn Profile</a>
+              </div>
+            </div>
+            <button class="mt-6 px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 w-full">Close</button>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        const closeBtn = modal.querySelector('button');
+        closeBtn.onclick = () => modal.remove();
+        
+        modal.onclick = (e) => {
+          if (e.target === modal) modal.remove();
+        };
+      }}
+    >
+      Meet the team
+    </button>
+  );
+};
+
+const TechStackButton = () => {
+  return (
+    <button
+      className="rounded-lg bg-indigo-500 hover:bg-indigo-600 transition-colors duration-300 text-white font-medium px-4 py-3 pointer-events-auto drop-shadow-md"
+      onClick={() => {
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        modal.innerHTML = `
+          <div class="bg-white p-8 rounded-lg max-w-2xl w-full mx-4">
+            <h2 class="text-2xl font-bold mb-6">Tech Stack</h2>
+            <div class="grid gap-6 md:grid-cols-3">
+              <div class="text-center">
+                <h3 class="font-semibold mb-2">Frontend</h3>
+                <ul class="space-y-1">
+                  <li>React</li>
+                  <li>Three.js</li>
+                  <li>React Three Fiber</li>
+                  <li>TailwindCSS</li>
+                </ul>
+              </div>
+              <div class="text-center">
+                <h3 class="font-semibold mb-2">Backend</h3>
+                <ul class="space-y-1">
+                  <li>PocketBase</li>
+                  <li>Node.js</li>
+                  <li>SQLite</li>
+                </ul>
+              </div>
+              <div class="text-center">
+                <h3 class="font-semibold mb-2">Tools</h3>
+                <ul class="space-y-1">
+                  <li>Vite</li>
+                  <li>Blender</li>
+                  <li>GLTF Transform</li>
+                </ul>
+              </div>
+            </div>
+            <button class="mt-6 px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 w-full">Close</button>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        const closeBtn = modal.querySelector('button');
+        closeBtn.onclick = () => modal.remove();
+        
+        modal.onclick = (e) => {
+          if (e.target === modal) modal.remove();
+        };
+      }}
+    >
+      Tech Stack
+    </button>
+  );
+};
 
 export const UI = () => {
   const currentCategory = useConfiguratorStore(
@@ -207,8 +352,10 @@ export const UI = () => {
           </a>
           <div className="flex items-cente gap-2">
             <RandomizeButton />
-            <ScreenshotButton />
-            <DownloadButton />
+            {/* <ScreenshotButton />
+            <DownloadButton /> */}
+            <MeetTheTeamButton />
+            <TechStackButton />
           </div>
         </div>
         <div className="md:px-10 flex flex-col">
@@ -244,7 +391,7 @@ export const UI = () => {
                 `}
               onClick={() => setMode(UI_MODES.PHOTO)}
             >
-              Photo booth
+              Talk with avatar
             </button>
           </div>
         </div>
