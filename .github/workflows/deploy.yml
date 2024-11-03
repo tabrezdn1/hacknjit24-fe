@@ -12,9 +12,11 @@ jobs:
     env:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
+    environment: production
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
@@ -26,21 +28,25 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: terraform init
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: tabrezdn1/hacknjit24-fe:${{ github.sha }} # Uses the Git SHA for tagging
+          platforms: linux/amd64,linux/arm64 # Multi-platform support
+          cache-from: type=registry,ref=tabrezdn1/hacknjit24-fe:cache
+          cache-to: type=inline,mode=max
+
       - name: Terraform Apply
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: terraform apply -auto-approve -var="vercel_token=${{ secrets.VERCEL_TOKEN }}"
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}  # Add this to your GitHub Secrets
-          password: ${{ secrets.DOCKER_PASSWORD }}  # Add this to your GitHub Secrets
-
-      - name: Build and Push Docker Image
-        run: |
-          docker build -t tabrezdn1/hacknjit24-fe:latest .  # Replace with your Docker image name
-          docker push tabrezdn1/hacknjit24-fe:latest        # Push image to Docker Hub
-
-      - name: Deploy to Vercel
-        run: terraform apply -auto-approve
