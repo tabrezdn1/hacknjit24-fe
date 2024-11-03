@@ -22,10 +22,14 @@ jobs:
           terraform_wrapper: false
 
       - name: Terraform Init
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}  # Pass the Vercel token as an environment variable
         run: terraform init
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}  # Pass the Vercel token as an environment variable
+        run: terraform apply -auto-approve -var="vercel_token=${{ secrets.VERCEL_TOKEN }}"  # Pass vercel_token to Terraform
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
