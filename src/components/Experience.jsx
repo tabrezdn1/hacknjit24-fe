@@ -31,7 +31,7 @@ export const Experience = () => {
 
       // Create an image element for the logo
       const logo = new Image();
-      logo.src = "/images/wawasensei-white.png";
+      logo.src = "/images/healmate.png";
       logo.crossOrigin = "anonymous";
       logo.onload = () => {
         // Draw the logo onto the overlay canvas

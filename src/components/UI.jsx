@@ -280,19 +280,22 @@ const MeetTheTeamButton = () => {
           "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
         modal.innerHTML = `
           <div class="bg-white p-8 rounded-lg max-w-2xl w-full mx-4">
-            <h2 class="text-2xl font-bold mb-6">Meet Our Team</h2>
+            <h2 class="text-2xl font-bold mb-6">Meet Our Team- HealMate AI</h2>
             <div class="grid gap-6 md:grid-cols-3">
               <div class="text-center">
-                <h3 class="font-semibold mb-2">Team Member 1</h3>
-                <a href="https://linkedin.com/in/member1" target="_blank" class="text-indigo-600 hover:text-indigo-800">LinkedIn Profile</a>
+                <h3 class="font-semibold mb-2">Shaik Tabrez</h3>
+                <img src="images/member1.jpeg" alt="Team Member 1" class="mb-2 rounded-full w-24 h-24 mx-auto" />
+                <a href="https://www.linkedin.com/in/shaik-tabrez/" target="_blank" class="text-indigo-600 hover:text-indigo-800">LinkedIn Profile</a>
               </div>
               <div class="text-center">
-                <h3 class="font-semibold mb-2">Team Member 2</h3>
-                <a href="https://linkedin.com/in/member2" target="_blank" class="text-indigo-600 hover:text-indigo-800">LinkedIn Profile</a>
+                <h3 class="font-semibold mb-2">Jonathan Grossman</h3>
+                <img src="images/member2.jpeg" alt="Team Member 2" class="mb-2 rounded-full w-24 h-24 mx-auto" />
+                <a href="https://www.linkedin.com/in/jonathan-grossman/" target="_blank" class="text-indigo-600 hover:text-indigo-800">LinkedIn Profile</a>
               </div>
               <div class="text-center">
-                <h3 class="font-semibold mb-2">Team Member 3</h3>
-                <a href="https://linkedin.com/in/member3" target="_blank" class="text-indigo-600 hover:text-indigo-800">LinkedIn Profile</a>
+                <h3 class="font-semibold mb-2">Mohamad Alrajjal</h3>
+                <img src="images/member3.jpeg" alt="Team Member 3" class="mb-2 rounded-full w-24 h-24 mx-auto" />
+                <a href="https://www.linkedin.com/in/mohamad-alrajjal/" target="_blank" class="text-indigo-600 hover:text-indigo-800">LinkedIn Profile</a>
               </div>
             </div>
             <button class="mt-6 px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 w-full">Close</button>
@@ -326,28 +329,44 @@ const TechStackButton = () => {
           <div class="bg-white p-8 rounded-lg max-w-2xl w-full mx-4">
             <h2 class="text-2xl font-bold mb-6">Tech Stack</h2>
             <div class="grid gap-6 md:grid-cols-3">
-              <div class="text-center">
+              <div>
                 <h3 class="font-semibold mb-2">Frontend</h3>
                 <ul class="space-y-1">
-                  <li>React</li>
-                  <li>Three.js</li>
-                  <li>React Three Fiber</li>
-                  <li>TailwindCSS</li>
+<li>React</li>
+<li>React DOM</li>
+<li>@react-three (fiber, drei, postprocessing, eslint-plugin)</li>
+<li>Three.js</li>
+<li>GLTF-Transform (core, extensions, functions)</li>
+<li>PocketBase</li>
+<li>Zustand</li>
+<li>Leva</li>
+<li>TailwindCSS</li>
                 </ul>
               </div>
-              <div class="text-center">
+              <div>
                 <h3 class="font-semibold mb-2">Backend</h3>
                 <ul class="space-y-1">
-                  <li>PocketBase</li>
-                  <li>Node.js</li>
-                  <li>SQLite</li>
+                  <li>FastAPI</li>
+<li>Uvicorn</li>
+<li>Pydantic</li>
+<li>pyhumps</li>
+<li>python-multipart</li>
+<li>WebSockets</li>
+<li>LangChain (with community, OpenAI, and Fireworks integrations)</li>
+<li>LangGraph</li>
+<li>Wikipedia API</li>
+<li>Tavily Python</li>
                 </ul>
               </div>
-              <div class="text-center">
+              <div>
                 <h3 class="font-semibold mb-2">Tools</h3>
                 <ul class="space-y-1">
                   <li>Vite</li>
-                  <li>Blender</li>
+                  <li>Terraform</li>
+<li>Adobe Explore Add-ons</li>
+<li>GitHub Actions</li>
+<li>Docker</li>
+<li>Docker Hub</li>
                   <li>GLTF Transform</li>
                 </ul>
               </div>
@@ -387,11 +406,13 @@ export const UI = () => {
         }`}
       >
         <img src="/images/healmate.png" className="w-40 animate-pulse" />
+        <h5 className="text-4xl text-white">HealMate AI</h5>
       </div>
       <div className="mx-auto h-full max-w-screen-xl w-full flex flex-col justify-between">
         <div className="flex justify-between items-center p-10">
           <a className="pointer-events-auto" href="/">
             <img className="w-20" src="/images/healmate.png" />
+            <h5 className="text-lg text-white">HealMate AI</h5>
           </a>
           <div className="flex items-cente gap-2">
             <RandomizeButton />
