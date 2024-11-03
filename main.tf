@@ -13,10 +13,10 @@ terraform {
     }
   }
 }
-# Configure the Vercel provider
-provider "vercel" {
-  token = var.vercel_token  # Use the variable instead of a hardcoded token
-}
+# # Configure the Vercel provider
+# provider "vercel" {
+#   token = var.vercel_token  # Use the variable instead of a hardcoded token
+# }
 
 # Define the Vercel project
 resource "vercel_project" "my_docker_app" {
