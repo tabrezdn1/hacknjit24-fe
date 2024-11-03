@@ -5,14 +5,22 @@ const JsonValue = ({ value }) => {
   if (typeof value === "object" && value !== null) {
     return (
       <div className="pl-4">
-        {Object.entries(value).map(([key, val]) => (
-          <div key={key} className="flex flex-col">
-            <span className="text-indigo-300">{key}:</span>
-            <div className="pl-2">
-              <JsonValue value={val} />
+        <div className="grid grid-cols-2 gap-4">
+          {value.sections.map((section, index) => (
+            <div className="shadow-md rounded-lg p-4" key={index}>
+              <h5 className="text-lg">{section.title}</h5>
+              <p>{section.description}</p>
+              {section.stratergies?.map((strategy, stratIndex) => (
+                <div key={stratIndex}>
+                  <h6>{strategy.name}</h6>
+                  <p>{strategy.description}</p>
+                  <p>{strategy.when_to_use}</p>
+                </div>
+              ))}
+              <br />
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     );
   }
@@ -27,6 +35,17 @@ const PosesBox = () => {
 
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
+    const poses = Object.values(PHOTO_POSES);
+    let intervalId;
+
+    // Function to set a random pose
+    const updatePose = () => {
+      const randomPose = poses[Math.floor(Math.random() * poses.length)];
+      setPose(randomPose);
+    };
+
+    // Start updating poses infinitely
+    intervalId = setInterval(updatePose, 500); // Change pose every 500ms
 
     try {
       const encodedTopic = encodeURIComponent(inputValue.trim());
@@ -41,19 +60,20 @@ const PosesBox = () => {
 
       const data = await res.json();
       console.log("Response:", data);
-      setResponse(data);
+      // Trim the data object to a maximum of 6 keys
+      const trimmedData = Object.keys(data)
+        .slice(0, 6)
+        .reduce((obj, key) => {
+          obj[key] = data[key];
+          return obj;
+        }, {});
 
-      const poses = Object.values(PHOTO_POSES);
-      let firstPose = poses[Math.floor(Math.random() * poses.length)];
-      let thirdPose;
-      do {
-        thirdPose = poses[Math.floor(Math.random() * poses.length)];
-      } while (thirdPose === firstPose);
+      setResponse(trimmedData);
 
-      setTimeout(() => setPose(firstPose), Math.random() * 500);
-      setTimeout(() => setPose(PHOTO_POSES.Idle), Math.random() * 500 + 500);
-      setTimeout(() => setPose(thirdPose), Math.random() * 500 + 1000);
+      clearInterval(intervalId);
+      setPose(PHOTO_POSES.Idle);
     } catch (error) {
+      clearInterval(intervalId);
       console.error("Error:", error);
       setResponse({ error: "Failed to fetch response" });
     }
@@ -95,7 +115,6 @@ const PosesBox = () => {
     </div>
   );
 };
-
 
 const AssetsBox = () => {
   const {
@@ -256,8 +275,9 @@ const MeetTheTeamButton = () => {
     <button
       className="rounded-lg bg-indigo-500 hover:bg-indigo-600 transition-colors duration-300 text-white font-medium px-4 py-3 pointer-events-auto drop-shadow-md"
       onClick={() => {
-        const modal = document.createElement('div');
-        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        const modal = document.createElement("div");
+        modal.className =
+          "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
         modal.innerHTML = `
           <div class="bg-white p-8 rounded-lg max-w-2xl w-full mx-4">
             <h2 class="text-2xl font-bold mb-6">Meet Our Team</h2>
@@ -278,12 +298,12 @@ const MeetTheTeamButton = () => {
             <button class="mt-6 px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 w-full">Close</button>
           </div>
         `;
-        
+
         document.body.appendChild(modal);
-        
-        const closeBtn = modal.querySelector('button');
+
+        const closeBtn = modal.querySelector("button");
         closeBtn.onclick = () => modal.remove();
-        
+
         modal.onclick = (e) => {
           if (e.target === modal) modal.remove();
         };
@@ -299,8 +319,9 @@ const TechStackButton = () => {
     <button
       className="rounded-lg bg-indigo-500 hover:bg-indigo-600 transition-colors duration-300 text-white font-medium px-4 py-3 pointer-events-auto drop-shadow-md"
       onClick={() => {
-        const modal = document.createElement('div');
-        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        const modal = document.createElement("div");
+        modal.className =
+          "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
         modal.innerHTML = `
           <div class="bg-white p-8 rounded-lg max-w-2xl w-full mx-4">
             <h2 class="text-2xl font-bold mb-6">Tech Stack</h2>
@@ -334,12 +355,12 @@ const TechStackButton = () => {
             <button class="mt-6 px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 w-full">Close</button>
           </div>
         `;
-        
+
         document.body.appendChild(modal);
-        
-        const closeBtn = modal.querySelector('button');
+
+        const closeBtn = modal.querySelector("button");
         closeBtn.onclick = () => modal.remove();
-        
+
         modal.onclick = (e) => {
           if (e.target === modal) modal.remove();
         };
@@ -365,17 +386,11 @@ export const UI = () => {
           loading ? "opacity-100" : "opacity-0"
         }`}
       >
-        <img
-          src="/images/healmate.png"
-          className="w-40 animate-pulse"
-        />
+        <img src="/images/healmate.png" className="w-40 animate-pulse" />
       </div>
       <div className="mx-auto h-full max-w-screen-xl w-full flex flex-col justify-between">
         <div className="flex justify-between items-center p-10">
-          <a
-            className="pointer-events-auto"
-            href="/"
-          >
+          <a className="pointer-events-auto" href="/">
             <img className="w-20" src="/images/healmate.png" />
           </a>
           <div className="flex items-cente gap-2">
