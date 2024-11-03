@@ -15,7 +15,7 @@ terraform {
 }
 # # Configure the Vercel provider
 provider "vercel" {
-  api_token = var.vercel_token  # Use `api_token` as required by the provider
+  api_token = "kMtMcvxFVpxCHrfFRT3bG7pc"  # Use `api_token` as required by the provider
 }
 
 # Define the Vercel project with git_repository as an attribute
