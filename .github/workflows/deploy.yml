@@ -3,11 +3,14 @@ name: Deploy to Vercel
 on:
   push:
     branches:
-      - main  # Trigger on pushes to the main branch
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}  # Add this to your GitHub Secrets
 
     steps:
       - name: Checkout code
@@ -16,12 +19,24 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: 1.0.0  # Specify the Terraform version
+          terraform_wrapper: false
 
       - name: Terraform Init
         run: terraform init
 
       - name: Terraform Apply
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}  # Store your Vercel token in GitHub Secrets
+        run: terraform apply -auto-approve
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}  # Add this to your GitHub Secrets
+          password: ${{ secrets.DOCKER_PASSWORD }}  # Add this to your GitHub Secrets
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t tabrezdn1/hacknjit24-fe:latest .  # Replace with your Docker image name
+          docker push tabrezdn1/hacknjit24-fe:latest        # Push image to Docker Hub
+
+      - name: Deploy to Vercel
         run: terraform apply -auto-approve
