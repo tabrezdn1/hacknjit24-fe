@@ -4,7 +4,15 @@ variable "vercel_token" {
   type        = string
   sensitive   = true
 }
-
+# Configure the Vercel provider
+terraform {
+  required_providers {
+    vercel = {
+      source  = "vercel/vercel"  # Correct source for the Vercel provider
+      version = "~> 1.0"         # Specify the version you want to use
+    }
+  }
+}
 # Configure the Vercel provider
 provider "vercel" {
   token = var.vercel_token  # Use the variable instead of a hardcoded token
