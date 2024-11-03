@@ -3,8 +3,32 @@ import { pb, PHOTO_POSES, UI_MODES, useConfiguratorStore } from "../store";
 const PosesBox = () => {
   const curPose = useConfiguratorStore((state) => state.pose);
   const setPose = useConfiguratorStore((state) => state.setPose);
+
+// Function to handle pose change
+const handlePoseChange = () => {
+  const poses = Object.values(PHOTO_POSES);
+  let firstPose = poses[Math.floor(Math.random() * poses.length)];
+  let thirdPose;
+  // Make sure third pose is different from first
+  do {
+    thirdPose = poses[Math.floor(Math.random() * poses.length)];
+  } while (thirdPose === firstPose);
+
+  setTimeout(() => {
+    setPose(firstPose);
+  }, Math.random() * 500);
+  
+  setTimeout(() => {
+    setPose(PHOTO_POSES.Idle);
+  }, Math.random() * 500 + 500);
+  
+  setTimeout(() => {
+    setPose(thirdPose);
+  }, Math.random() * 500 + 1000);
+};
+
   return (
-    <div className="pointer-events-auto md:rounded-t-lg bg-gradient-to-br from-black/30 to-indigo-900/20 backdrop-blur-sm drop-shadow-md flex flex-col p-6 gap-4">
+    <div className="pointer-events-auto md:rounded-t-lg bg-gradient-to-br from-black/30 to-indigo-900/20 backdrop-blur-sm drop-shadow-md flex flex-col p-6 gap-4 overflow-y-auto max-h-96">
       <div className="flex flex-col gap-4">
         <div className="text-white">Hi how are you today?</div>
         <div className="flex gap-2">
@@ -14,51 +38,13 @@ const PosesBox = () => {
             className="flex-1 bg-black/20 text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-indigo-500"
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                const poses = Object.values(PHOTO_POSES);
-                let firstPose = poses[Math.floor(Math.random() * poses.length)];
-                let thirdPose;
-                // Make sure third pose is different from first
-                do {
-                  thirdPose = poses[Math.floor(Math.random() * poses.length)];
-                } while (thirdPose === firstPose);
-
-                setTimeout(() => {
-                  setPose(firstPose);
-                }, Math.random() * 500);
-                
-                setTimeout(() => {
-                  setPose(PHOTO_POSES.Idle);
-                }, Math.random() * 500 + 500);
-                
-                setTimeout(() => {
-                  setPose(thirdPose);
-                }, Math.random() * 500 + 1000);
+                handlePoseChange();
               }
             }}
           />
           <button 
             className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition-colors"
-            onClick={() => {
-              const poses = Object.values(PHOTO_POSES);
-              let firstPose = poses[Math.floor(Math.random() * poses.length)];
-              let thirdPose;
-              // Make sure third pose is different from first
-              do {
-                thirdPose = poses[Math.floor(Math.random() * poses.length)];
-              } while (thirdPose === firstPose);
-
-              setTimeout(() => {
-                setPose(firstPose);
-              }, Math.random() * 500);
-              
-              setTimeout(() => {
-                setPose(PHOTO_POSES.Idle);
-              }, Math.random() * 500 + 500);
-              
-              setTimeout(() => {
-                setPose(thirdPose);
-              }, Math.random() * 500 + 1000);
-            }}
+            onClick={handlePoseChange}
           >
             Send
           </button>
@@ -68,6 +54,7 @@ const PosesBox = () => {
     </div>
   );
 };
+
 
 const AssetsBox = () => {
   const {
@@ -338,7 +325,7 @@ export const UI = () => {
         }`}
       >
         <img
-          src="/images/wawasensei-white.png"
+          src="/images/healmate.png"
           className="w-40 animate-pulse"
         />
       </div>
@@ -346,9 +333,9 @@ export const UI = () => {
         <div className="flex justify-between items-center p-10">
           <a
             className="pointer-events-auto"
-            href="https://lessons.wawasensei.dev/courses/react-three-fiber"
+            href="/"
           >
-            <img className="w-20" src="/images/wawasensei-white.png" />
+            <img className="w-20" src="/images/healmate.png" />
           </a>
           <div className="flex items-cente gap-2">
             <RandomizeButton />

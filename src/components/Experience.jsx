@@ -129,7 +129,7 @@ export const Experience = () => {
       </AvatarWrapper>
       <Gltf
         position-y={-0.31}
-        src="/models/Teleporter Base.glb"
+        src="/models/Teleporter_Base.glb"
         castShadow
         receiveShadow
       />
