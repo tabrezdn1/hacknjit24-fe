@@ -6,7 +6,8 @@
     "scripts": {
       "dev": "vite",
       "build": "vite build",
-      "preview": "vite preview"
+      "preview": "vite preview",
+      "deploy": "npm run build && aws s3 sync dist/ s3://hacknjit24-fe-bucket"
     },
     "dependencies": {
       "@gltf-transform/core": "^4.0.10",
