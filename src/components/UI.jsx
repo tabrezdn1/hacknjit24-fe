@@ -8,7 +8,7 @@ const JsonValue = ({ value }) => {
         <div className="grid grid-cols-2 gap-4">
           {value.sections.map((section, index) => (
             <div className="shadow-md rounded-lg p-4" key={index}>
-              <h5 className="text-lg">{section.title}</h5>
+              <h5 className="text-2xl">{section.title}</h5>
               <p>{section.description}</p>
               {section.stratergies?.map((strategy, stratIndex) => (
                 <div key={stratIndex}>
@@ -60,15 +60,10 @@ const PosesBox = () => {
 
       const data = await res.json();
       console.log("Response:", data);
-      // Trim the data object to a maximum of 6 keys
-      const trimmedData = Object.keys(data)
-        .slice(0, 6)
-        .reduce((obj, key) => {
-          obj[key] = data[key];
-          return obj;
-        }, {});
-
-      setResponse(trimmedData);
+      setResponse({
+        ...data,
+        sections: data.sections.slice(0, 6), // Trim sections to a maximum of 6 items
+      });
 
       clearInterval(intervalId);
       setPose(PHOTO_POSES.Idle);
@@ -332,30 +327,24 @@ const TechStackButton = () => {
               <div>
                 <h3 class="font-semibold mb-2">Frontend</h3>
                 <ul class="space-y-1">
-<li>React</li>
-<li>React DOM</li>
-<li>@react-three (fiber, drei, postprocessing, eslint-plugin)</li>
-<li>Three.js</li>
-<li>GLTF-Transform (core, extensions, functions)</li>
-<li>PocketBase</li>
-<li>Zustand</li>
-<li>Leva</li>
-<li>TailwindCSS</li>
+                  <li>React</li>
+                  <li>Three.js</li>
+                  <li>GLTF-Transform</li>
+                  <li>PocketBase</li>
+                  <li>Zustand</li>
+                  <li>Leva</li>
+                  <li>TailwindCSS</li>
                 </ul>
               </div>
               <div>
                 <h3 class="font-semibold mb-2">Backend</h3>
                 <ul class="space-y-1">
                   <li>FastAPI</li>
-<li>Uvicorn</li>
-<li>Pydantic</li>
-<li>pyhumps</li>
-<li>python-multipart</li>
-<li>WebSockets</li>
-<li>LangChain (with community, OpenAI, and Fireworks integrations)</li>
-<li>LangGraph</li>
-<li>Wikipedia API</li>
-<li>Tavily Python</li>
+                  <li>Uvicorn</li>
+                  <li>WebSockets</li>
+                  <li>LangChain</li>
+                  <li>Wikipedia API</li>
+                  <li>Tavily Python</li>
                 </ul>
               </div>
               <div>
@@ -363,10 +352,9 @@ const TechStackButton = () => {
                 <ul class="space-y-1">
                   <li>Vite</li>
                   <li>Terraform</li>
-<li>Adobe Explore Add-ons</li>
-<li>GitHub Actions</li>
-<li>Docker</li>
-<li>Docker Hub</li>
+                  <li>Adobe Explore Add-ons</li>
+                  <li>GitHub Actions</li>
+                  <li>Docker and DockerHub</li>
                   <li>GLTF Transform</li>
                 </ul>
               </div>
