@@ -1,55 +1,96 @@
 import { pb, PHOTO_POSES, UI_MODES, useConfiguratorStore } from "../store";
+import React, { useState } from "react";
+
+const JsonValue = ({ value }) => {
+  if (typeof value === "object" && value !== null) {
+    return (
+      <div className="pl-4">
+        {Object.entries(value).map(([key, val]) => (
+          <div key={key} className="flex flex-col">
+            <span className="text-indigo-300">{key}:</span>
+            <div className="pl-2">
+              <JsonValue value={val} />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  return <span className="text-green-300">{JSON.stringify(value)}</span>;
+};
 
 const PosesBox = () => {
   const curPose = useConfiguratorStore((state) => state.pose);
   const setPose = useConfiguratorStore((state) => state.setPose);
+  const [inputValue, setInputValue] = useState("");
+  const [response, setResponse] = useState(null);
 
-// Function to handle pose change
-const handlePoseChange = () => {
-  const poses = Object.values(PHOTO_POSES);
-  let firstPose = poses[Math.floor(Math.random() * poses.length)];
-  let thirdPose;
-  // Make sure third pose is different from first
-  do {
-    thirdPose = poses[Math.floor(Math.random() * poses.length)];
-  } while (thirdPose === firstPose);
+  const handleSendMessage = async () => {
+    if (!inputValue.trim()) return;
 
-  setTimeout(() => {
-    setPose(firstPose);
-  }, Math.random() * 500);
-  
-  setTimeout(() => {
-    setPose(PHOTO_POSES.Idle);
-  }, Math.random() * 500 + 500);
-  
-  setTimeout(() => {
-    setPose(thirdPose);
-  }, Math.random() * 500 + 1000);
-};
+    try {
+      const encodedTopic = encodeURIComponent(inputValue.trim());
+      const res = await fetch(
+        `https://hacknjit24-be.vercel.app/llm/generate_outline?topic=${encodedTopic}`,
+        { method: "POST" }
+      );
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
+      const data = await res.json();
+      console.log("Response:", data);
+      setResponse(data);
+
+      const poses = Object.values(PHOTO_POSES);
+      let firstPose = poses[Math.floor(Math.random() * poses.length)];
+      let thirdPose;
+      do {
+        thirdPose = poses[Math.floor(Math.random() * poses.length)];
+      } while (thirdPose === firstPose);
+
+      setTimeout(() => setPose(firstPose), Math.random() * 500);
+      setTimeout(() => setPose(PHOTO_POSES.Idle), Math.random() * 500 + 500);
+      setTimeout(() => setPose(thirdPose), Math.random() * 500 + 1000);
+    } catch (error) {
+      console.error("Error:", error);
+      setResponse({ error: "Failed to fetch response" });
+    }
+  };
 
   return (
-    <div className="pointer-events-auto md:rounded-t-lg bg-gradient-to-br from-black/30 to-indigo-900/20 backdrop-blur-sm drop-shadow-md flex flex-col p-6 gap-4 overflow-y-auto max-h-96">
+    <div className="flex flex-col gap-4 p-6 pointer-events-auto md:rounded-t-lg bg-gradient-to-br from-black/30 to-indigo-900/20 backdrop-blur-sm drop-shadow-md">
       <div className="flex flex-col gap-4">
         <div className="text-white">Hi how are you today?</div>
         <div className="flex gap-2">
-          <input 
+          <input
             type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
             placeholder="Type your message..."
-            className="flex-1 bg-black/20 text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-indigo-500"
+            className="flex-1 px-4 py-2 text-white rounded-lg outline-none bg-black/20 focus:ring-2 focus:ring-indigo-500"
             onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handlePoseChange();
+              if (e.key === "Enter") {
+                handleSendMessage();
               }
             }}
           />
-          <button 
-            className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition-colors"
-            onClick={handlePoseChange}
+          <button
+            className="px-4 py-2 text-white transition-colors bg-indigo-500 rounded-lg hover:bg-indigo-600"
+            onClick={handleSendMessage}
           >
             Send
           </button>
         </div>
-        <div className="text-white">Put the response here and render it conditionally</div>
+
+        {response && (
+          <div className="overflow-y-auto rounded-lg max-h-96 bg-black/20">
+            <div className="p-4 text-white">
+              <JsonValue value={response} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
